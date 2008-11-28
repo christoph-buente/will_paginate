@@ -290,7 +290,7 @@ module WillPaginate
       
       if page and page != current_page
         classnames = span_class && span_class.index(' ') && span_class.split(' ', 2).last
-        page_link page, text, :rel => rel_value(page), :class => classnames
+        page_link page, text, :rel => rel_value(text), :class => classnames
       else
         page_span page, text, :class => span_class
       end
@@ -348,9 +348,12 @@ module WillPaginate
 
     def rel_value(page)
       case page
-      when @collection.previous_page; 'prev' + (page == 1 ? ' start' : '')
-      when @collection.next_page; 'next'
-      when 1; 'start'
+      when @options[:previous_label]; 'prev'
+      when @options[:next_label]; 'next'
+      when 1.to_s; 'first'
+      when @total_pages.to_s; 'last'
+      when @collection.previous_page.to_s; 'prev'
+      when @collection.next_page.to_s; 'next'
       end
     end
 

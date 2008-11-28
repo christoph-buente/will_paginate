@@ -41,13 +41,16 @@ class ViewTest < WillPaginate::ViewTestCase
         validate_page_numbers [1,1,3,3], elements
         # test rel attribute values:
         assert_select elements[1], 'a', '1' do |link|
-          assert_equal 'prev start', link.first['rel']
+          assert_equal 'first', link.first['rel']
         end
         assert_select elements.first, 'a', "Prev" do |link|
-          assert_equal 'prev start', link.first['rel']
+          assert_equal 'prev', link.first['rel']
         end
         assert_select elements.last, 'a', "Next" do |link|
           assert_equal 'next', link.first['rel']
+        end
+        assert_select elements[2], 'a', '3' do |link|
+          assert_equal 'last', link.first['rel']
         end
       end
       assert_select 'span.current', '2'
@@ -95,7 +98,7 @@ class ViewTest < WillPaginate::ViewTestCase
       <div class="pagination"><span class="disabled prev_page">&laquo; Previous</span>
       <span class="current">1</span>
       <a href="/foo/bar?page=2" rel="next">2</a>
-      <a href="/foo/bar?page=3">3</a>
+      <a href="/foo/bar?page=3" rel="last">3</a>
       <a href="/foo/bar?page=2" class="next_page" rel="next">Next &raquo;</a></div>
     HTML
     expected.strip!.gsub!(/\s{2,}/, ' ')
